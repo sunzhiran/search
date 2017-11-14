@@ -45,7 +45,7 @@ public abstract class TextExtractor {
     }
 
     public static void main(String[] args) {
-        DocText docText = TextExtractor.extractText("C:\\Users\\Administrator\\Desktop\\text.html", SourceTypeEnum.HTML_LOCAL);
+        DocText docText = TextExtractor.extractText("C:\\Users\\Administrator\\Desktop\\ddd.html", SourceTypeEnum.OTHERS_LOCAL);
         logger.info(docText.toString());
     }
 }
