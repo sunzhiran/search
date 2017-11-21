@@ -2,6 +2,8 @@ package edu.bjut.search.service;
 
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
+import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,15 @@ public class WordAnalyzeService {
         analyzer.setUseSmart(true);
         try {
             TokenStream tokenStream = analyzer.tokenStream("", text);
+            tokenStream.addAttribute(OffsetAttribute.class);
+            tokenStream.addAttribute(TypeAttribute.class);
             tokenStream.addAttribute(CharTermAttribute.class);
             tokenStream.reset();
+            OffsetAttribute offsetAttribute = tokenStream.getAttribute(OffsetAttribute.class);
+            TypeAttribute typeAttribute = tokenStream.getAttribute(TypeAttribute.class);
             CharTermAttribute charTermAttribute = tokenStream.getAttribute(CharTermAttribute.class);
             while (tokenStream.incrementToken()) {
-                logger.info(charTermAttribute.toString());
+                logger.info(charTermAttribute.toString() + "pos: " + offsetAttribute.startOffset() + ":" + offsetAttribute.endOffset() + " type: " + typeAttribute.type());
             }
             tokenStream.close();
         } catch (IOException e) {
