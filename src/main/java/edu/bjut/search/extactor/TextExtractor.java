@@ -1,9 +1,12 @@
 package edu.bjut.search.extactor;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class TextExtractor {
 
@@ -42,6 +45,15 @@ public abstract class TextExtractor {
         }
 
         return null;
+    }
+
+    private static boolean checkSource(String url) {
+        if (StringUtils.isBlank(url))
+            return false;
+        String reg = "(http|https|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
+        Pattern pattern = Pattern.compile(reg);
+        Matcher matcher = pattern.matcher(url);
+        return matcher.matches();
     }
 
     public static void main(String[] args) {
