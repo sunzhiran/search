@@ -46,7 +46,7 @@ public class SearchService {
             if (docAttribute == null) {
                 return null;
             }
-            RandomAccessFile randomAccessFile = new RandomAccessFile(docAttribute.getLink(), "r");
+            RandomAccessFile randomAccessFile = new RandomAccessFile("doc/doc_"+docId+".log", "r");
             String[] offset2 = offset1.split(",");
             StringBuilder viewContent = new StringBuilder();
             for (int j=0; j<Math.min(offset2.length, VIEW_NUM); j++) {
