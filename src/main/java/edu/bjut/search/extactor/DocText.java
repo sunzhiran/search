@@ -5,6 +5,8 @@ public class DocText {
     private String title;
     private String content;
     private String source;
+    private String docType;
+    private String view;
 
     public String getTitle() {
         return title;
@@ -28,6 +30,22 @@ public class DocText {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getDocType() {
+        return docType;
+    }
+
+    public void setDocType(String docType) {
+        this.docType = docType;
+    }
+
+    public String getView() {
+        return view;
+    }
+
+    public void setView(String view) {
+        this.view = view;
     }
 
     @Override

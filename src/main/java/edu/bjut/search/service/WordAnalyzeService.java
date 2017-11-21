@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class WordAnalyzeService {
     private static Logger logger = LoggerFactory.getLogger(WordAnalyzeService.class);
 
-    public static String analyze(String text) {
+    public Map<String, Map<String, String>> analyze(String text) {
+        Map<String, Map<String, String>> map = new HashMap<>();
         IKAnalyzer analyzer = new IKAnalyzer();
         analyzer.setUseSmart(true);
         try {
@@ -28,16 +31,24 @@ public class WordAnalyzeService {
             TypeAttribute typeAttribute = tokenStream.getAttribute(TypeAttribute.class);
             CharTermAttribute charTermAttribute = tokenStream.getAttribute(CharTermAttribute.class);
             while (tokenStream.incrementToken()) {
-                logger.info(charTermAttribute.toString() + "pos: " + offsetAttribute.startOffset() + ":" + offsetAttribute.endOffset() + " type: " + typeAttribute.type());
+                String term = charTermAttribute.toString();
+                if (map.containsKey(term)) {
+                    map.get(term).put("count", (Integer.valueOf(map.get(term).get("count")) + 1)+"");
+                    map.get(term).put("offset", map.get(term).get("offset")+","+offsetAttribute.startOffset());
+                }
+                else {
+                    Map<String, String> termMap = new HashMap<>();
+                    termMap.put("count", "1");
+                    termMap.put("offset", offsetAttribute.startOffset()+"");
+                    map.put(term, termMap);
+                }
+                logger.info(term + "pos: " + offsetAttribute.startOffset() + ":" + offsetAttribute.endOffset() + " type: " + typeAttribute.type());
             }
             tokenStream.close();
         } catch (IOException e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
         }
-        return "";
+        return map;
     }
 
-    public static void main(String[] args) {
-        analyze("我的家在东北，松花江上，那里有漂亮的小姐姐。");
-    }
 }
