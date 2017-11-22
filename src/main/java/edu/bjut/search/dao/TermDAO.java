@@ -6,12 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 
+@Repository
 public class TermDAO {
 
     private static Logger logger = LoggerFactory.getLogger(TermDAO.class);
@@ -35,15 +37,20 @@ public class TermDAO {
     }
 
     public TermAttribute queryByTerm(String term) {
-        Map<String, Object> map = jdbcTemplate.queryForMap("select * from index_term where term=?", new Object[]{term});
-        if (map == null || map.size() <= 0)
+        try {
+            Map<String, Object> map = jdbcTemplate.queryForMap("select * from index_term where term=?", new Object[]{term});
+            if (map == null || map.size() <= 0)
+                return null;
+            TermAttribute termAttribute = new TermAttribute();
+            termAttribute.setTerm(term);
+            termAttribute.setDocList((String) map.get("doc_list"));
+            termAttribute.setFrequency((String) map.get("frequency"));
+            termAttribute.setOffset((String) map.get("offset"));
+            return termAttribute;
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
             return null;
-        TermAttribute termAttribute = new TermAttribute();
-        termAttribute.setTerm(term);
-        termAttribute.setDocList((String) map.get("doc_list"));
-        termAttribute.setFrequency((String) map.get("frequency"));
-        termAttribute.setOffset((String) map.get("offset"));
-        return termAttribute;
+        }
     }
 
     public Integer updateByTerm(TermAttribute termAttribute) {

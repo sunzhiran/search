@@ -42,7 +42,10 @@ public class IndexService {
         // 更新正向索引
         Integer docId = docDAO.insertDoc(docAttribute);
         // 存原始数据
-        FileUtils.write(new File("doc/doc_" + docId + ".log"), docText.getContent());
+        File file = new File("E:\\work\\search\\src\\main\\resources\\doc\\doc_" + docId + ".log");
+        if (!file.exists())
+            file.createNewFile();
+        FileUtils.write(file, docText.getContent(), "unicode");
         // 分词
         Map<String, Map<String, String>> map = wordAnalyzeService.analyze(docText.getContent());
         // 更新反向索引

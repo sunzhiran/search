@@ -19,11 +19,20 @@ public class ExtractorService {
             logger.warn("数据源地址不合法。");
             return null;
         }
-        return TextExtractor.extractText(source, SourceTypeEnum.OTHERS_ONLINE);
+        DocText docText = TextExtractor.extractText(source, SourceTypeEnum.OTHERS_ONLINE);
+        docText.setDocType(source.substring(source.lastIndexOf(".")+1));
+        return docText;
     }
 
     public DocText getTextFromLocal(String source) {
-        return TextExtractor.extractText(source, SourceTypeEnum.OTHERS_LOCAL);
+        if (source == null){
+            logger.warn("数据源地址不合法。");
+            return null;
+        }
+
+        DocText docText = TextExtractor.extractText(source, SourceTypeEnum.OTHERS_LOCAL);
+        docText.setDocType(source.substring(source.lastIndexOf(".")+1));
+        return docText;
     }
 
 

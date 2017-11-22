@@ -24,7 +24,7 @@ public class SearchService {
     private TermDAO termDAO;
 
     private static Integer VIEW_NUM = 2;
-    private static Integer VIEW_LEN = 50;
+    private static Integer VIEW_LEN = 5;
 
     /**
      * 根据关键词搜索
@@ -34,6 +34,8 @@ public class SearchService {
      */
     public List<DocAttribute> search(String keywords) throws IOException {
         TermAttribute termAttribute = termDAO.queryByTerm(keywords);
+        if (termAttribute == null)
+            return null;
         String docList = termAttribute.getDocList();
         String offset = termAttribute.getOffset();
         String[] docListArr = docList.split(",");
@@ -46,17 +48,23 @@ public class SearchService {
             if (docAttribute == null) {
                 return null;
             }
-            RandomAccessFile randomAccessFile = new RandomAccessFile("doc/doc_"+docId+".log", "r");
+            RandomAccessFile randomAccessFile = new RandomAccessFile("E:\\work\\search\\src\\main\\resources\\doc\\doc_"+docId+".log", "r");
             String[] offset2 = offset1.split(",");
             StringBuilder viewContent = new StringBuilder();
             for (int j=0; j<Math.min(offset2.length, VIEW_NUM); j++) {
                 long offsetValue = Long.valueOf(offset2[j]);
                 long start = offsetValue - VIEW_LEN;
                 if (start < 0) start = 0;
-                long end = start + 100;
+                long end = offsetValue + VIEW_LEN + keywords.length();
                 if (end >= randomAccessFile.length()/2) end = randomAccessFile.length()/2;
                 randomAccessFile.seek(start*2);
                 for (long k=start; k<end; k++) {
+                    if (k == offsetValue+1) {
+                        viewContent.append("<font color='red'>");
+                    }
+                    if (k == offsetValue+keywords.length()+1) {
+                        viewContent.append("</font>");
+                    }
                     viewContent.append(randomAccessFile.readChar());
                 }
                 viewContent.append("...");

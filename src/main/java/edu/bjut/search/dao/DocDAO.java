@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 
 @Repository
@@ -28,12 +29,12 @@ public class DocDAO {
      * @return 返回docId
      */
     public Integer insertDoc(DocAttribute docAttribute) {
-        String sql = "insert into doc(link,title,docType) values(?,?,?)";
+        String sql = "insert into doc(link,title,doc_type) values(?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(sql);
+                PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, docAttribute.getLink());
                 ps.setString(2, docAttribute.getTitle());
                 ps.setString(3, docAttribute.getDocType());
@@ -45,15 +46,20 @@ public class DocDAO {
     }
 
     public DocAttribute getById(Integer docId) {
-        Map<String, Object> map = jdbcTemplate.queryForMap("select * from doc where doc_id=?", new Object[]{docId});
-        if (map == null || map.size() <= 0)
+        try {
+            Map<String, Object> map = jdbcTemplate.queryForMap("select * from doc where doc_id=?", new Object[]{docId});
+            if (map == null || map.size() <= 0)
+                return null;
+            DocAttribute docAttribute = new DocAttribute();
+            docAttribute.setDocId(docId);
+            docAttribute.setTitle((String) map.get("title"));
+            docAttribute.setLink((String) map.get("link"));
+            docAttribute.setDocType((String) map.get("docType"));
+            return docAttribute;
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
             return null;
-        DocAttribute docAttribute = new DocAttribute();
-        docAttribute.setDocId(docId);
-        docAttribute.setTitle((String) map.get("title"));
-        docAttribute.setLink((String) map.get("link"));
-        docAttribute.setDocType((String) map.get("docType"));
-        return docAttribute;
+        }
     }
 
 
