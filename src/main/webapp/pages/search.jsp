@@ -8,9 +8,29 @@
 </head>
 <body>
 <div id="search-field">
-    <form id="search-form" action="api/search" method="post">
+    <form id="search-form" action="api/search" method="get">
         <input type="text"/>
         <button type="submit">搜索一下</button>
+    </form>
+    
+    <br>
+    
+    <form action="api/index/offline" method="post">
+        <input type="file"/>
+        <button type="submit">选择一个文件</button>
+    </form>
+    <br>
+
+    <form action="api/index/offline/batch" method="post">
+        <input type="file"/>
+        <button type="submit">选择一个文件夹</button>
+    </form>
+
+    <br>
+
+    <form action="api/index/online" method="post">
+        <input type="text"/>
+        <button type="submit">输入一个URL地址</button>
     </form>
 </div>
 </body>

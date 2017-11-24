@@ -1,5 +1,6 @@
 package edu.bjut.search.service;
 
+import edu.bjut.search.bloom.BloomFilter;
 import edu.bjut.search.dao.DocDAO;
 import edu.bjut.search.dao.TermDAO;
 import edu.bjut.search.entity.DocAttribute;
@@ -35,6 +36,8 @@ public class IndexService {
      * @param docText
      */
     public void index(DocText docText) throws IOException {
+        if (docText == null || !existCheck(docText.getContent()))
+            return;
         DocAttribute docAttribute = new DocAttribute();
         docAttribute.setTitle(docText.getTitle());
         docAttribute.setLink(docText.getSource());
@@ -67,6 +70,17 @@ public class IndexService {
                 termDAO.updateByTerm(termAttribute);
             }
         }
+    }
+
+    public boolean existCheck(String content) {
+        if (content == null || content.trim().equals(""))
+            return false;
+        BloomFilter bloomFilter = BloomFilter.getInstance();
+        if (bloomFilter.contains(content))
+            return false;
+        else
+            bloomFilter.add(content);
+        return true;
     }
 
 }

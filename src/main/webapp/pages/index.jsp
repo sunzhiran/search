@@ -14,10 +14,10 @@
     if (docs == null || docs.size() <= 0)
         out.println("搜索结果为空。");
     else {
-        out.println("为您找到大约" + docs.size() + "条结果。");
+        out.println("为您找到大约" + docs.size() + "条结果。<br>");
         for (DocAttribute doc : docs) {
-            out.println("<a href=\"" + doc.getLink() + "\" target=\"_blank\">"+doc.getTitle()+"</a>");
-            out.println(doc.getView());
+            out.println("<a href=\"" + doc.getLink() + "\" target=\"_blank\">"+doc.getTitle()+"</a><br>");
+            out.println(doc.getView()+"<br>");
         }
     }
 
