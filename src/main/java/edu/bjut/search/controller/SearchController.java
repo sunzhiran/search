@@ -17,7 +17,7 @@ import java.util.List;
 @Controller
 @EnableAutoConfiguration
 public class SearchController {
-    private static Logger logger = LoggerFactory.getLogger(URIController.class);
+    private static Logger logger = LoggerFactory.getLogger(SearchController.class);
 
     @Autowired
     private SearchService searchService;

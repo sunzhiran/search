@@ -8,30 +8,33 @@
 </head>
 <body>
 <div id="search-field">
-    <form id="search-form" action="api/search" method="get">
-        <input type="text"/>
-        <button type="submit">搜索一下</button>
-    </form>
-    
-    <br>
-    
-    <form action="api/index/offline" method="post">
-        <input type="file"/>
-        <button type="submit">选择一个文件</button>
-    </form>
-    <br>
+    <br><br><br><br><br><br><br><br>
+    <div id="cen" style="text-align:center">
+        <form id="search-form" action="<%=request.getContextPath()%>/api/search" method="get">
+            <input type="text" name="keyword" id="keyword" style="height:20px;weight:100px"/>
+            <button type="submit">搜索一下</button>
+        </form>
+    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-    <form action="api/index/offline/batch" method="post">
-        <input type="file"/>
-        <button type="submit">选择一个文件夹</button>
+    <form action="<%=request.getContextPath()%>/api/index/offline" method="post">
+        <input type="file" name="source"/>
+        <button type="submit">提交</button>
     </form>
-
     <br>
 
-    <form action="api/index/online" method="post">
-        <input type="text"/>
-        <button type="submit">输入一个URL地址</button>
+    <form action="<%=request.getContextPath()%>/api/index/offline/batch" method="post">
+        <input type="text" name="source" placeholder="输入文件夹路径"/>
+        <button type="submit">提交</button>
     </form>
+
+    <br>
+
+    <form action="<%=request.getContextPath()%>/api/index/online" method="post">
+        <input type="text" name="source" placeholder="输入URL路径"/>
+        <button type="submit">提交</button>
+    </form>
+
 </div>
 </body>
 
