@@ -28,6 +28,6 @@ public class SearchController {
             return "error";
         List<DocAttribute> docs = searchService.search(keyword);
         request.setAttribute("docs", docs);
-        return "index";
+        return "/pages/index.jsp";
     }
 }
