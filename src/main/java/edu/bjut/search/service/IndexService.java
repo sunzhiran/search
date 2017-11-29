@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -20,6 +21,9 @@ import java.util.Map;
 public class IndexService {
 
     private static Logger logger = LoggerFactory.getLogger(IndexService.class);
+
+    @Value("${search.data.dir}")
+    private static String DATA_DIR;
 
     @Autowired
     private DocDAO docDAO;
@@ -45,7 +49,7 @@ public class IndexService {
         // 更新正向索引
         Integer docId = docDAO.insertDoc(docAttribute);
         // 存原始数据
-        File file = new File("E:\\work\\search\\src\\main\\resources\\doc\\doc_" + docId + ".log");
+        File file = new File(DATA_DIR + "doc_" + docId + ".log");
         if (!file.exists())
             file.createNewFile();
         FileUtils.write(file, docText.getContent(), "unicode");
