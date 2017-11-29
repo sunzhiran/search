@@ -18,7 +18,7 @@
     <br><br><br><br><br><br><br><br><br><br><br><br><br>
 
     <form action="<%=request.getContextPath()%>/api/index/offline" method="post">
-        <input type="file" name="source"/>
+        <input type="text" name="source" placeholder="输入文件路径"/>
         <button type="submit">提交</button>
     </form>
     <br>
