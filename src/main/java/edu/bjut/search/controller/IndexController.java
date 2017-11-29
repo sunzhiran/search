@@ -25,19 +25,21 @@ public class IndexController {
     private IndexService indexService;
 
     @RequestMapping(value = "/api/index/offline", method = RequestMethod.POST)
-    public void indexForOffline(HttpServletRequest request, String source) {
+    public String indexForOffline(HttpServletRequest request, String source) {
         DocText docText = TextExtractor.extractText(source, SourceTypeEnum.OTHERS_LOCAL);
         try {
             indexService.index(docText);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+        return "/pages/search.jsp";
     }
 
     @RequestMapping(value = "/api/index/offline/batch", method = RequestMethod.POST)
-    public void indexForOfflineBatch(HttpServletRequest request, String source) {
+    public String indexForOfflineBatch(HttpServletRequest request, String source) {
         File file = new File(source);
         batchIndex(file);
+        return "/pages/search.jsp";
     }
 
     private void batchIndex(File file) {
@@ -61,13 +63,14 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/api/index/online", method = RequestMethod.POST)
-    public void indexForOnline(HttpServletRequest request, String source) {
+    public String indexForOnline(HttpServletRequest request, String source) {
         DocText docText = TextExtractor.extractText(source, SourceTypeEnum.OTHERS_ONLINE);
         try {
             indexService.index(docText);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+        return "/pages/search.jsp";
     }
 
 }

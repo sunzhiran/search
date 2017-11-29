@@ -13,7 +13,7 @@ public class BloomFilter<E> implements Serializable {
 
     public static BloomFilter getInstance() {
         if (bloomFilter == null) {
-            synchronized (bloomFilter) {
+            synchronized (BloomFilter.class) {
                 if (bloomFilter == null) {
                     bloomFilter = new BloomFilter<String>(0.1, 100);
                 }

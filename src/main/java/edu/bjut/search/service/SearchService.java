@@ -7,6 +7,7 @@ import edu.bjut.search.entity.TermAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,8 +24,11 @@ public class SearchService {
     @Autowired
     private TermDAO termDAO;
 
-    private static Integer VIEW_NUM = 2;
-    private static Integer VIEW_LEN = 5;
+    @Value("${search.data.dir}")
+    private static String DATA_DIR;
+
+    private static Integer VIEW_NUM = 2;//高亮数目
+    private static Integer VIEW_LEN = 5;//高亮前后显示数目
 
     /**
      * 根据关键词搜索
@@ -48,7 +52,7 @@ public class SearchService {
             if (docAttribute == null) {
                 return null;
             }
-            RandomAccessFile randomAccessFile = new RandomAccessFile("E:\\work\\search\\src\\main\\resources\\doc\\doc_"+docId+".log", "r");
+            RandomAccessFile randomAccessFile = new RandomAccessFile(DATA_DIR + "doc_"+docId+".log", "r");
             String[] offset2 = offset1.split(",");
             StringBuilder viewContent = new StringBuilder();
             for (int j=0; j<Math.min(offset2.length, VIEW_NUM); j++) {
