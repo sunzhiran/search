@@ -33,7 +33,7 @@ public class SearchApplication extends SpringBootServletInitializer implements C
         dataSource.setUsername(env.getProperty("spring.datasource.username"));
         dataSource.setPassword(env.getProperty("spring.datasource.password"));
         dataSource.setInitialSize(20);
-        dataSource.setMaxActive(2000);
+        dataSource.setMaxActive(200000000);
         dataSource.setMinIdle(0);
         dataSource.setMaxWait(60000);
         dataSource.setValidationQuery("SELECT 1");
